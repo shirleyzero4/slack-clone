@@ -1,4 +1,4 @@
-import { AccessTime, AccountCircle, Search } from '@mui/icons-material'
+import { AccessTime, AccountCircle, HelpOutline, Search } from '@mui/icons-material'
 import React from 'react'
 import './Header.css'
 
@@ -21,6 +21,7 @@ function Header() {
 
         <div className='header-right'>
             {/* Help Icon */}
+            <HelpOutline />
         </div>
     </div>
   )
