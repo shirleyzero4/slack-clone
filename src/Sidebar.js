@@ -1,22 +1,30 @@
 import { Add, Apps, BookmarkBorder, Create, ExpandLess, ExpandMore, FiberManualRecord, FileCopy, InsertComment, PeopleAlt } from '@mui/icons-material';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect} from 'react';
 import SidebarOption from './SidebarOption';
 import './Sidebar.css';
-import db from "./firebase";
+import db from "./config/firebase";
+import { collection, getDocs } from "firebase/firestore";
+
 
 function Sidebar() {
   const [channels, setChannels] = useState([]);
 
+  const roomsCollection = collection(db, "rooms");
   useEffect(() => {
-    //Run this effect when the sidebar component loads
-    db.collection("rooms").onSnaphot((snapshot) => 
-      setChannels(
-        snapshot.docs.map((doc) => ({
-          id: doc.id, 
-          name: doc.data().name
-        }))
-      )
-    );
+    const getRoomsList = async () => {
+      try {
+        const data = await getDocs(roomsCollection);
+        const formatedData = data.docs.map((doc) => ({
+          name: doc.data().name,
+          id: doc.id,
+        }));
+        setChannels(formatedData);
+      } catch(err) {
+        console.error(err);
+      }
+    };
+
+    getRoomsList();
   }, []);
 
   return (
@@ -51,4 +59,4 @@ function Sidebar() {
   )
 }
 
-export default Sidebar
+export default Sidebar;
